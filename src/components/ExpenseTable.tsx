@@ -24,7 +24,7 @@ const ExpenseTable = () => {
 
   return (
     <>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>Name</th>
@@ -33,16 +33,17 @@ const ExpenseTable = () => {
           </tr>
         </thead>
         <tbody>
-          {arrayUpdated &&
-            dataArray.map((item) => {
-              return (
-                <tr key={item.name}>
-                  <td>{item.name}</td>
-                  <td>{item.date}</td>
-                  <td>{item.amount}</td>
-                </tr>
-              );
-            })}
+          {arrayUpdated
+            ? dataArray.map((item) => {
+                return (
+                  <tr key={item.name}>
+                    <td>{item.name}</td>
+                    <td>{item.date}</td>
+                    <td>{item.amount}</td>
+                  </tr>
+                );
+              })
+            : null}
         </tbody>
       </table>
     </>

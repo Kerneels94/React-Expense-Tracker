@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./ExpenseForm.module.css";
 
 /**
  * @description Expenses form to take user input
@@ -32,17 +33,18 @@ export default function ExpenseForm() {
       setExpenseDate("");
       setExpenseAmount("");
     } else {
-      console.log("data could not be added");
+      alert("Data could not be added please fill in the fields");
     }
   }
 
   return (
     <>
-      <form>
-        <h1>Enter expenses</h1>
+      <form className={styles.container}>
+        <h1 className={styles.heading}>Enter expenses</h1>
 
         <label htmlFor="expenseName">Name</label>
         <input
+          className={styles.inputFields}
           type="text"
           value={expenseName}
           onChange={(e) => setExpenseName(e.target.value)}
@@ -50,6 +52,7 @@ export default function ExpenseForm() {
 
         <label htmlFor="expenseDate">Date</label>
         <input
+          className={styles.inputFields}
           type="date"
           value={expenseDate}
           onChange={(e) => setExpenseDate(e.target.value)}
@@ -57,6 +60,7 @@ export default function ExpenseForm() {
 
         <label htmlFor="expenseAmount">Amount</label>
         <input
+          className={styles.inputFields}
           type="number"
           value={expenseAmount}
           onChange={(e) => setExpenseAmount(e.target.value)}
