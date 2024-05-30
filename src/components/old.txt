@@ -1,0 +1,24 @@
+/**
+   * @description Use effect to add data to localstorage
+   */
+  // useEffect(() => {
+  //   localStorage.setItem("data", JSON.stringify(dataArray));
+  // }, [dataArray]);
+
+  /**
+   * @description Function that addes a entry
+   */
+  // function addEntry() {
+  //   if (expenseName !== "" && expenseAmount !== "") {
+  //     let newData = [
+  //       ...dataArray,
+  //       { name: expenseName, amount: expenseAmount, date: expenseDate },
+  //     ];
+  //     setDataArray(newData);
+  //     setExpenseName("");
+  //     setExpenseDate("");
+  //     setExpenseAmount("");
+  //   } else {
+  //     alert("Data could not be added please fill in the fields");
+  //   }
+  // }

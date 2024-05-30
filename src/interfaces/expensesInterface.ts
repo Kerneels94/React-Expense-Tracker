@@ -1,8 +1,16 @@
 // Interfaces
 
 export interface Expenses {
-  expense: string,
-  amount: number,
-  createdAt: Date,
-  total: number,
+  expenseName: string,
+  expenseAmount: number,
+  expenseDate: Date,
+  createdAt?: Date,
+  editDate?: Date,
 }
+
+export type ExpensesType = {
+  isCreated: boolean;
+  expenseData: Expenses | null;
+}
+
+

@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./ExpenseForm.module.css";
+import { Expenses, ExpensesType } from "./../interfaces/expensesInterface";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 /**
  * @description Expenses form to take user input
@@ -7,34 +11,54 @@ import styles from "./ExpenseForm.module.css";
  */
 
 export default function ExpenseForm() {
-  const [dataArray, setDataArray] = useState<{}[]>([]);
   const [expenseName, setExpenseName] = useState("");
-  const [expenseDate, setExpenseDate] = useState("");
-  const [expenseAmount, setExpenseAmount] = useState("");
+  const [expenseDate, setExpenseDate] = useState(Date);
+  const [expenseAmount, setExpenseAmount] = useState(Number);
+  const [editDate, setEditDate] = useState(Date);
 
-  /**
-   * @description Use effect to add data to localstorage
-   */
-  useEffect(() => {
-    localStorage.setItem("data", JSON.stringify(dataArray));
-  }, [dataArray]);
+  async function addEntry(): Promise<ExpensesType> {
+    let isExpenseCreated: boolean = false;
+    let expenseData: Expenses | null = null;
 
-  /**
-   * @description Function that addes a entry
-   */
-  function addEntry() {
-    if (expenseName !== "" && expenseAmount !== "") {
-      let newData = [
-        ...dataArray,
-        { name: expenseName, amount: expenseAmount, date: expenseDate },
-      ];
-      setDataArray(newData);
-      setExpenseName("");
-      setExpenseDate("");
-      setExpenseAmount("");
-    } else {
-      alert("Data could not be added please fill in the fields");
+    // If the expense exists get it
+    let expenseExist = await prisma.expenses.findMany({
+      where: {
+        expenseName: expenseName,
+      },
+    });
+
+    // Check if expenses ixist
+    expenseExist ? !isExpenseCreated : isExpenseCreated;
+
+    try {
+      if (expenseExist && isExpenseCreated) {
+        let createExpense = await prisma.expenses.create({
+          data: {
+            expenseName: expenseName,
+            expenseAmount: expenseAmount,
+            expenseDate: expenseDate,
+            editDate: editDate,
+          },
+        });
+
+        isExpenseCreated = true;
+        expenseData = createExpense;
+
+        return {
+          isCreated: isExpenseCreated,
+          expenseData: expenseData,
+        };
+      }
+    } catch (error) {
+      console.log("Expense could not be created", error);
+    } finally {
+      await prisma.$disconnect();
     }
+
+    return {
+      isCreated: isExpenseCreated,
+      expenseData: expenseData,
+    };
   }
 
   return (
@@ -63,7 +87,7 @@ export default function ExpenseForm() {
           className={styles.inputFields}
           type="number"
           value={expenseAmount}
-          onChange={(e) => setExpenseAmount(e.target.value)}
+          onChange={(e) => setExpenseAmount(parseInt(e.target.value))}
         />
 
         <button type="button" onClick={addEntry}>
